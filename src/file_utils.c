@@ -1,7 +1,4 @@
 #include "include.h"
-#include <dirent.h>
-#include <sys/stat.h>
-#include <ctype.h>
 
 char* get_extension(const char *filename) {
     char *dot = strrchr(filename, '.');

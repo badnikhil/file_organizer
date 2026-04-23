@@ -1,12 +1,28 @@
+# Build artifacts
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
 # Executables
+file_organizer
 run
 
-# Objects
+# Object files
 *.o
 
-# VS Code
+# Editor settings
 .vscode/
+
+# Generated / temporary files
+*.log
+*.tmp
+*.bak
 
 # Local tests
 test/
 testrun
+
+# OS files
+.DS_Store
