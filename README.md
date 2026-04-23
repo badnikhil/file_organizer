@@ -1,20 +1,20 @@
-# 📁 File Organizer
+#  File Organizer
 
 A lightweight, efficient command-line utility written in C that organizes clutter in your directories by moving files into subfolders based on their file extensions.
 
-## 🚀 Features
+##  Features
 
 - **Blazing Fast**: Uses `uthash` for O(1) extension lookup.
 - **Automatic Sorting**: Automatically categorizes files into common folders like `Documents`, `Images`, `Videos`, and `Code`.
 - **Lightweight**: Minimal dependencies and small memory footprint.
 
-## 🛠️ Prerequisites
+##  Prerequisites
 
 To compile this project, you need:
 - **GCC** (or any C compiler)
 - **uthash**: This project expects the `uthash` library to be available at `../libraries/`. You can find it at [troydhanson/uthash](https://github.com/troydhanson/uthash).
 
-## 🔨 Building the Project
+##  Building the Project
 
 You can build the project using the provided compilation script:
 
@@ -25,7 +25,7 @@ chmod +x compile
 
 This will generate an executable named `run`.
 
-## 📖 Usage
+## 📖Usage
 
 Run the program by providing the path to the folder you want to organize:
 
@@ -45,7 +45,7 @@ Running the organizer will sort them into:
 - `Images/vacation.jpg`
 - `Code/main.c`
 
-## ⚙️ Configuration
+##  Configuration
 
 Currently, the extension-to-folder mapping is defined in `extensions.c`:
 
