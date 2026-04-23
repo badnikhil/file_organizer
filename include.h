@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <stddef.h>
 #include <ctype.h>
 #include"uthash.h"
 
