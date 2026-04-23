@@ -35,8 +35,6 @@ Currently, the organizer supports the following mappings out-of-the-box:
 
 To compile this project, you need:
 - **GCC** (or any C compiler)
-- **uthash**: This project expects the `uthash` library to be available at `../libraries/`. You can find it at [troydhanson/uthash](https://github.com/troydhanson/uthash).
-
 ##  Building the Project
 
 You can build the project using the provided compilation script:
