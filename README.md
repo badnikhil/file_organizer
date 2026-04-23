@@ -8,6 +8,17 @@ A lightweight, efficient command-line utility written in C that organizes clutte
 - **Automatic Sorting**: Automatically categorizes files into common folders like `Documents`, `Images`, `Videos`, and `Code`.
 - **Lightweight**: Minimal dependencies and small memory footprint.
 
+##  Supported Extensions
+
+Currently, the organizer supports the following mappings out-of-the-box:
+
+| Extension | Target Folder |
+| :--- | :--- |
+| `.pdf` | Documents |
+| `.jpg`, `.png` | Images |
+| `.mp4` | Videos |
+| `.c` | Code |
+
 ##  Prerequisites
 
 To compile this project, you need:
