@@ -1,0 +1,12 @@
+# Executables
+run
+
+# Objects
+*.o
+
+# VS Code
+.vscode/
+
+# Local tests
+test/
+testrun
