@@ -46,6 +46,16 @@ chmod +x compile
 
 This will generate an executable named `run`.
 
+### Building with CMake
+
+Run following commands in directory with project:
+```bash
+mkdir build
+cd build
+cmake -S .. -B .
+make
+```
+
 ## 📖Usage
 
 Run the program by providing the path to the folder you want to organize:
