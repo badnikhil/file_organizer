@@ -33,4 +33,5 @@ extern char* get_folder(char* ext);
 extern void organize(char* path);
 
 extern char* expand_config_path(const char* path);
+extern RETURN read_config_file(const char*path);
 #endif
