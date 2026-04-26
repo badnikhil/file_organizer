@@ -13,3 +13,20 @@ char* expand_config_path(const char* path){
   wordfree(&exp);
   return expanded;
 }
+RETURN read_config_file(const char*path){
+  FILE* fp = fopen(path,"r");
+  if(!fp)
+    {
+      fprintf("failed to read config file:%s!\n");
+      return FAIL;
+    }
+
+  char buf[256];
+  while(fgets(line, sizeof(line), file))
+    {
+      
+    }
+
+  fclose(fp);
+
+}
