@@ -1,7 +1,7 @@
 #include "include.h"
 struct Mapping *map = NULL;
 
-enum RETURN build_extension_folder_hashmap(){
+RETURN build_extension_folder_hashmap(){
 
     // build up the hashmap
     for(int i = 0 ; i < defaults_size ; i++){
@@ -20,8 +20,8 @@ char* get_folder(char* ext){
     struct Mapping *temp;
     HASH_FIND_STR(map , ext , temp);
     if(temp == NULL){
-        printf("Something Went Wrong , at %s",ext);
-        return NULL;
+      fprintf(stderr,"Something Went Wrong , at %s",ext);
+      return NULL;
     }
     return temp->folder;
     }

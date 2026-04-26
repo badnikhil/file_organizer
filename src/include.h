@@ -15,17 +15,17 @@ struct Mapping {
 };
 
 
-enum RETURN{
+typedef enum{
     SUCCESS = 0,
     FAIL = 1,
     SOMETHING_WRONG = 2
 
-};
+} RETURN;
 
 extern struct Mapping defaults[];
 extern size_t defaults_size;
 
-extern enum RETURN build_extension_folder_hashmap();
+extern RETURN build_extension_folder_hashmap();
 extern char* get_folder(char* ext);
 extern void organize(char* path);
 #endif
