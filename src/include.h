@@ -1,12 +1,34 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
-#define _POSIX_C_SOURCE 200809L
+
+// Must be defined before any system headers to expose POSIX extensions
+#ifndef _WIN32
+    #define _POSIX_C_SOURCE 200809L
+#endif
+
 #include <stdio.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+    #include <windows.h>
+    #include <io.h>       // _access
+    #include <direct.h>   // _mkdir
+    #include <dirent.h>   // MinGW provides this
+    #include <sys/stat.h>
+    #define mkdir(p, m) _mkdir(p)
+    #define access      _access
+    #define PATH_SEP    '\\'
+    #define ACCESS_OK   0
+    typedef int ssize_t;
+#else
+    #include <unistd.h>
+    #include <dirent.h>
+    #include <sys/stat.h>
+    #define PATH_SEP    '/'
+    #define ACCESS_OK   (F_OK | R_OK)
+#endif
+
 #include "uthash.h"
 
 typedef char bool;

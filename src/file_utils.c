@@ -41,7 +41,7 @@ void organize(char* path) {
         snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
 
         struct stat st;
-        if (lstat(full_path, &st) == 0 && S_ISDIR(st.st_mode)) {
+        if (stat(full_path, &st) == 0 && S_ISDIR(st.st_mode)) {
             printf("Skipped But Found %s\n", entry->d_name);
             continue;
         }

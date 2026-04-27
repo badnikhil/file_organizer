@@ -1,6 +1,3 @@
-#define _POSIX_C_SOURCE 200809L
-#include <unistd.h>
-#include <stdlib.h>
 #include "include.h"
 
 int main(int argc, char** argv) {
@@ -35,19 +32,26 @@ int main(int argc, char** argv) {
     } else {
         // 2. Try directory where the executable lies
         char exe_path[1024];
-        ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
-        if (len != -1) {
-            exe_path[len] = '\0';
-            
-            // Manual dirname implementation
-            char *last_slash = strrchr(exe_path, '/');
-            if (last_slash) {
-                *last_slash = '\0'; // Truncate at last slash to get directory
-            }
-            
-            snprintf(config_file_path, sizeof(config_file_path), "%s/config.ini", exe_path);
-            
-            if (access(config_file_path, F_OK | R_OK) == 0) {
+        bool got_exe = false;
+
+#ifdef _WIN32
+        DWORD wlen = GetModuleFileNameA(NULL, exe_path, sizeof(exe_path));
+        if (wlen > 0 && wlen < sizeof(exe_path)) {
+            got_exe = true;
+        }
+#else
+        ssize_t rlen = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
+        if (rlen != -1) {
+            exe_path[rlen] = '\0';
+            got_exe = true;
+        }
+#endif
+
+        if (got_exe) {
+            char *last_slash = strrchr(exe_path, PATH_SEP);
+            if (last_slash) *last_slash = '\0';
+            snprintf(config_file_path, sizeof(config_file_path), "%s%cconfig.ini", exe_path, PATH_SEP);
+            if (access(config_file_path, ACCESS_OK) == 0) {
                 resolved_path = config_file_path;
             }
         }
