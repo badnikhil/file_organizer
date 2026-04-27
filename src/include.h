@@ -9,7 +9,7 @@
 #include <wordexp.h>
 #include <unistd.h>
 #include <ctype.h>
-#include"uthash.h"
+#include "uthash.h"
 
 struct Mapping {
     char ext[10];       // key
