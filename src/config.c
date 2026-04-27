@@ -3,18 +3,6 @@
 struct Config* config = NULL;
 size_t config_size = 7;
 
-char* expand_config_path(const char* path) {
-    wordexp_t exp;
-
-    if (wordexp(path, &exp, WRDE_NOCMD) != 0) {
-        return NULL;
-    }
-
-    char* expanded = strdup(exp.we_wordv[0]);
-    wordfree(&exp);
-    return expanded;
-}
-
 int _read_dir_name(char* dir_name, char* buffer) {
     int pos = 0;
     while (buffer[pos] != ':') {

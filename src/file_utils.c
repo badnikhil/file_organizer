@@ -12,7 +12,8 @@ char* get_extension(const char *filename) {
 
     // convert to lowercase 
     for (int i = 0; ext[i]; i++) {
-        ext[i] = tolower(ext[i]);
+        if (ext[i] >= 'A' && ext[i] <= 'Z')
+            ext[i] += 32;
     }
 
     return ext;

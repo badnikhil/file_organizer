@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <wordexp.h>
 #include <unistd.h>
-#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include "uthash.h"
+
+typedef char bool;
+#define true  1
+#define false 0
 
 struct Mapping {
     char ext[10];       // key
@@ -42,7 +44,6 @@ extern RETURN build_extension_folder_hashmap_from_config();
 extern char* get_folder(char* ext);
 extern void organize(char* path);
 
-extern char* expand_config_path(const char* path);
 extern RETURN read_config_file(const char*path);
 extern void free_config(void);
 #endif
