@@ -14,8 +14,29 @@ RETURN build_extension_folder_hashmap(){
     }
 
     return SUCCESS;
+}
+RETURN build_extension_folder_hashmap_from_config(){
+  for(size_t i = 0;i<config_size;++i)
+    {
+      if(config[i].dir[0] == '\0') break;
+
+      for(int j = 0;j< 20 && config[i].exts[j] != NULL;++j)
+	{
+	  struct Mapping* m = malloc(sizeof(struct Mapping));
+	  if(!m) return FAIL;
+
+	  strcpy(m->ext, config[i].exts[j]);
+	  m->ext[sizeof(m->ext)-1] = '\0';
+
+	  strcpy(m->folder,config[i].dir);
+	  m->folder[sizeof(m->folder)-1] = '\0';
+
+	  HASH_ADD_STR(map,ext,m);
+	}
     }
 
+  return SUCCESS;
+}
 char* get_folder(char* ext){
     struct Mapping *temp;
     HASH_FIND_STR(map , ext , temp);
