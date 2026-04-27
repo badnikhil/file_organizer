@@ -18,12 +18,13 @@ int main(int argc , char** argv) {
       {       
 	if(read_config_file(config_path) != SUCCESS)
 	  {
-	    //failed to read file
+	    fprintf(stderr,"failed to read config! fallback to defaults...");
 	  }
       }
     else
       {
 	//can't access file
+	fprintf(stderr,"failed to read config! fallback to defaults...");
       }
 
     char* path = argv[1];
