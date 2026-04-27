@@ -1,37 +1,69 @@
+#define _POSIX_C_SOURCE 200809L
 #include <string.h>
 #include <libgen.h>
+#include <unistd.h>
+#include <getopt.h>
+#include <stdlib.h>
 #include "include.h"
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: ./file_organizer {Folder path to organize}\n");
-        return EXIT_FAILURE;
-    }
+    char* custom_config_path = NULL;
+    int opt;
 
-    bool use_config = false;
-    char config_file_path[1024] = {0};
-    char* resolved_path = NULL;
-
-    // 1. Try directory where the executable lies
-    char exe_path[1024];
-    ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
-    if (len != -1) {
-        exe_path[len] = '\0';
-        char* dir = dirname(exe_path);
-        snprintf(config_file_path, sizeof(config_file_path), "%s/config.ini", dir);
-        
-        if (access(config_file_path, F_OK | R_OK) == 0) {
-            resolved_path = config_file_path;
+    // Parse options
+    while ((opt = getopt(argc, argv, "c:")) != -1) {
+        switch (opt) {
+            case 'c':
+                custom_config_path = optarg;
+                break;
+            default:
+                fprintf(stderr, "Usage: %s [-c config_path] <directory>\n", argv[0]);
+                return EXIT_FAILURE;
         }
     }
 
-    // 2. Fall back to expansion of ~/.config path
+    // After options, we expect exactly 1 argument (the target directory)
+    if (optind >= argc) {
+        fprintf(stderr, "Error: Target directory not provided.\n");
+        fprintf(stderr, "Usage: %s [-c config_path] <directory>\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+
+    char* path = argv[optind];
+    bool use_config = false;
+    char config_file_path[1024] = {0};
+    char* resolved_path = NULL;
     char* home_config = NULL;
-    if (!resolved_path) {
-        home_config = expand_config_path("~/.config/file-organizer/config.ini");
-        if (home_config && access(home_config, F_OK | R_OK) == 0) {
-            strncpy(config_file_path, home_config, sizeof(config_file_path) - 1);
-            resolved_path = config_file_path;
+
+    // 1. Prioritize custom path if provided
+    if (custom_config_path) {
+        if (access(custom_config_path, F_OK | R_OK) == 0) {
+            resolved_path = custom_config_path;
+        } else {
+            fprintf(stderr, "Error: Custom config file not found or not readable: %s\n", custom_config_path);
+            return EXIT_FAILURE;
+        }
+    } else {
+        // 2. Try directory where the executable lies
+        char exe_path[1024];
+        ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
+        if (len != -1) {
+            exe_path[len] = '\0';
+            char* dir = dirname(exe_path);
+            snprintf(config_file_path, sizeof(config_file_path), "%s/config.ini", dir);
+            
+            if (access(config_file_path, F_OK | R_OK) == 0) {
+                resolved_path = config_file_path;
+            }
+        }
+
+        // 3. Fall back to expansion of ~/.config path
+        if (!resolved_path) {
+            home_config = expand_config_path("~/.config/file-organizer/config.ini");
+            if (home_config && access(home_config, F_OK | R_OK) == 0) {
+                strncpy(config_file_path, home_config, sizeof(config_file_path) - 1);
+                resolved_path = config_file_path;
+            }
         }
     }
 
@@ -49,8 +81,6 @@ int main(int argc, char** argv) {
     if (home_config) {
         free(home_config);
     }
-
-    char* path = argv[1];
 
     RETURN ret = use_config ? build_extension_folder_hashmap_from_config() : 
                               build_extension_folder_hashmap();
