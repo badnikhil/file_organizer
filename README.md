@@ -6,7 +6,9 @@ A lightweight, efficient command-line utility written in C that organizes clutte
 
 - **Blazing Fast**: Uses `uthash` for O(1) extension lookup.
 - **Automatic Sorting**: Automatically categorizes files into common folders like `Documents`, `Images`, `Videos`, and `Code`.
-- **Lightweight**: Minimal dependencies and small memory footprint.
+- **Configurable**: Use a `config.ini` file to customize extension-to-folder mappings without recompiling.
+- **Cross-Platform**: Runs on Linux and 64-bit Windows 10/11.
+- **Lightweight**: No external runtime dependencies, minimal memory footprint.
 
 ##  Supported Extensions
 
@@ -33,64 +35,100 @@ Currently, the organizer supports the following mappings out-of-the-box:
 
 ##  Prerequisites
 
-To compile this project, you need:
-- **GCC** (or any C compiler)
-##  Building the Project
+- **Linux**: GCC and CMake
+- **Windows (cross-compile from Linux)**: `mingw-w64` — install with:
+  ```bash
+  sudo apt install mingw-w64
+  ```
 
-You can build the project using the provided compilation script:
+## Building the Project
+
+### Linux
 
 ```bash
-chmod +x compile
-./compile
-```
-
-This will generate an executable named `run`.
-
-### Building with CMake
-
-Run following commands in directory with project:
-```bash
-mkdir build
-cd build
+mkdir build && cd build
 cmake -S .. -B .
 make
 ```
 
-## 📖Usage
+This produces `file_organizer` in the project root.
 
-Run the program by providing the path to the folder you want to organize:
+### Windows (cross-compile from Linux)
 
 ```bash
-./run "/path/to/your/cluttered/folder"
+cmake -B build-win -DCMAKE_TOOLCHAIN_FILE=mingw-toolchain.cmake
+cmake --build build-win
 ```
+
+This produces `file_organizer.exe` in the project root.
+
+## 📖 Usage
+
+```
+file_organizer [-c <config_path>] <target_directory>
+```
+
+### Linux
+
+```bash
+# Organize a folder using auto-detected config
+./file_organizer ~/Downloads
+
+# Organize using a custom config file
+./file_organizer -c ~/myconfig.ini ~/Downloads
+
+# Organize current directory
+./file_organizer .
+```
+
+### Windows (Command Prompt)
+
+```cmd
+:: Organize your Downloads folder
+file_organizer.exe %USERPROFILE%\Downloads
+
+:: Organize using a custom config
+file_organizer.exe -c C:\path\to\config.ini %USERPROFILE%\Downloads
+
+:: Easiest — open CMD inside the folder you want to organize, (also paste the config there for customizing things) then:
+file_organizer.exe .
+```
+(for paths you can just drag and drop files / folders)
+> **Tip (Windows):** You can also drag and drop a folder onto `file_organizer.exe` in Explorer to organize it without opening a terminal.
 
 ### Example
 
-If you have a folder with the following files:
+Given a folder with:
 - `report.pdf`
 - `vacation.jpg`
 - `main.c`
 
-Running the organizer will sort them into:
+After running, it becomes:
 - `Documents/report.pdf`
 - `Images/vacation.jpg`
 - `Code/main.c`
 
-##  Configuration
+## ⚙️ Configuration
 
-Currently, the extension-to-folder mapping is defined in `extensions.c`:
+The organizer looks for a `config.ini` file in this order:
+1. Same directory as the executable
+2. `~/.config/file-organizer/config.ini` (Linux) / `%USERPROFILE%\.config\file-organizer\config.ini` (Windows)
+3. Built-in defaults (if no config file is found)
 
-```c
-struct Mapping defaults[] = {
-    {"pdf", "Documents"},
-    {"jpg", "Images"},
-    {"png", "Images"},
-    {"c", "Code"},
-    {"mp4", "Videos"}
-};
+You can also pass a config explicitly with the `-c` flag.
+
+### Config Format
+
+Each line maps a folder name to a comma-separated list of extensions:
+
+```ini
+Documents: docx,doc,pdf,txt,pptx,xlsx,csv
+Images: jpg,jpeg,png,gif,svg,bmp
+Videos: mp4,mkv,avi,mov
+Music: mp3,wav,flac,ogg
+Code: c,cpp,h,py,js,ts
+Archives: zip,tar,rar,7z,gz
 ```
-
-You can modify this file and recompile to customize your organization logic.
 
 ##  How to Add More Extensions
 

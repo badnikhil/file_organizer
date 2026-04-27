@@ -20,7 +20,6 @@
     #define access      _access
     #define PATH_SEP    '\\'
     #define ACCESS_OK   0
-    typedef int ssize_t;
 #else
     #include <unistd.h>
     #include <dirent.h>
