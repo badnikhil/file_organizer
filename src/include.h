@@ -4,14 +4,25 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <stddef.h>
-#include <ctype.h>
-#include"uthash.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include "uthash.h"
+
+typedef char bool;
+#define true  1
+#define false 0
 
 struct Mapping {
     char ext[10];       // key
     char folder[20];    // value
     UT_hash_handle hh;
+};
+
+struct Config {
+  char dir[64]; //key
+  char* exts[20]; //value
+  UT_hash_handle hh;
 };
 
 
@@ -25,7 +36,14 @@ typedef enum{
 extern struct Mapping defaults[];
 extern size_t defaults_size;
 
+extern struct Config* config;
+extern size_t config_size;
+
 extern RETURN build_extension_folder_hashmap();
+extern RETURN build_extension_folder_hashmap_from_config();
 extern char* get_folder(char* ext);
 extern void organize(char* path);
+
+extern RETURN read_config_file(const char*path);
+extern void free_config(void);
 #endif

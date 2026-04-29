@@ -26,3 +26,5 @@ testrun
 
 # OS files
 .DS_Store
+
+test/
