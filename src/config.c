@@ -55,15 +55,21 @@ RETURN read_config_file(const char* path) {
         int i = 0, j = 0;
         while (*ext_line != '\0') {
             if (*ext_line == ',') {
+	      if(j > 0) {
                 exts[i][j] = '\0';
                 i++;
                 j = 0;
-            } else {
+	      }
+            } else if(!isspace(*ext_line))  {
                 if (j < 19) exts[i][j++] = *ext_line;
             }
             ext_line++;
         }
-        if (j > 0) exts[i][j] = '\0';
+        if (j > 0) {
+	  exts[i][j] = '\0';
+	  i++;
+	}
+	
 
         int actual_ext_count = i + (j > 0 ? 1 : 0);
         if (actual_ext_count > 20) actual_ext_count = 20;
