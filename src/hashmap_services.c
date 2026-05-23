@@ -39,11 +39,15 @@ RETURN build_extension_folder_hashmap_from_config() {
 }
 
 char* get_folder(char* ext) {
-    struct Mapping *temp;
-    HASH_FIND_STR(map, ext, temp);
-    if (temp == NULL) {
-        fprintf(stderr, "Something Went Wrong , at %s", ext);
-        return NULL;
+  if(!ext){
+    fprintf(stderr,"Extension is NULL!\n");
+    return NULL;
     }
-    return temp->folder;
+  struct Mapping *temp;
+  HASH_FIND_STR(map, ext, temp);
+  if (temp == NULL) {
+    fprintf(stderr, "Something Went Wrong , at %s", ext);
+    return NULL;
+  }
+  return temp->folder;
 }
